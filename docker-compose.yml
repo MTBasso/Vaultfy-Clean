@@ -1,0 +1,29 @@
+services:
+  database:
+    image: postgres
+    container_name: vaultfy_postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=pgbassola
+      - POSTGRES_PASSWORD=WARdPBoC2621
+      - POSTGRES_DB=vaultfy_postgres
+    volumes:
+      - pgdata:/data/postgres
+
+  app:
+    build: .
+    container_name: vaultfy_app
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/usr/app
+    links:
+      - database
+    depends_on:
+      - database
+
+volumes:
+  pgdata:
+    driver: local

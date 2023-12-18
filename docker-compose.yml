@@ -9,8 +9,6 @@ services:
       - POSTGRES_USER=pgbassola
       - POSTGRES_PASSWORD=WARdPBoC2621
       - POSTGRES_DB=vaultfy_postgres
-    volumes:
-      - pgdata:/data/postgres
 
   app:
     build: .

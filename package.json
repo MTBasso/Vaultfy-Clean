@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "scripts": {
     "dev": "tsnd src/shared/infra/http/server.ts --exit-child --respawn --transpile-only --ignore-watch node_modules",
@@ -18,7 +18,8 @@
     "bcrypt": "^5.1.1",
     "express": "^4.18.2",
     "reflect-metadata": "^0.2.1",
-    "tsyringe": "^4.8.0"
+    "tsyringe": "^4.8.0",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

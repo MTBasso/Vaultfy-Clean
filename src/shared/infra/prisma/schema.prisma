@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = "linux-musl"
+  binaryTargets = ["linux-musl", "windows"]
 }
 
 datasource db {
@@ -14,6 +14,24 @@ model User {
   email     String   @unique
   password  String
   secret    String
+  vault     Vault[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Vault {
+  id         String       @id @default(cuid())
+  name       String
+  credential Credential[]
+  User       User         @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+model Credential {
+  id       String @id @default(cuid())
+  service  String
+  username String
+  password String
+  Vault    Vault  @relation(fields: [vaultId], references: [id])
+  vaultId  String
 }

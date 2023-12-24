@@ -1,10 +1,13 @@
+import { sign } from 'jsonwebtoken';
+
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
-import { generateSecret, hashString } from '../../../../utils/encryption';
+import { compareHash, generateSecret, hashString } from '../../../../utils/encryption';
 import { IUserDTO } from '../entities/User';
 import { IUserRepository } from './IUserRepository';
 
 class UserRepository implements IUserRepository {
   async register({ username, email, password }: IUserDTO): Promise<void> {
+    if (!username) throw new Error('Username is required');
     const hashedPassword = await hashString(password);
     await prisma.user.create({
       data: {
@@ -14,6 +17,16 @@ class UserRepository implements IUserRepository {
         secret: generateSecret()
       }
     });
+  }
+
+  async login({ email, password }: IUserDTO): Promise<string | void> {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return;
+    const passwordMatch = await compareHash(password, user.password);
+    if (passwordMatch === false) return;
+    const token = sign({ userId: user.id }, 'SUPER-SECRET-KEY');
+    console.log(token);
+    return token;
   }
 }
 

@@ -17,6 +17,7 @@ services:
       - 5000:5000
     volumes:
       - .:/usr/app
+      - /home/node/app/node_modules
     links:
       - database
     depends_on:

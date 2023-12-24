@@ -1,7 +1,12 @@
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcryptjs';
 
 async function hashString(string: string): Promise<string> {
   return await hash(string, 10);
+}
+
+async function compareHash(inputPassword: string, userPassword: string): Promise<boolean> {
+  const passwordMatch = await compare(inputPassword, userPassword);
+  return passwordMatch;
 }
 
 function generateSecret(): string {
@@ -14,4 +19,4 @@ function generateSecret(): string {
   return randomString;
 }
 
-export { hashString, generateSecret };
+export { hashString, compareHash, generateSecret };

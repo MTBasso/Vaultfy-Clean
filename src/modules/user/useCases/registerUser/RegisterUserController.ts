@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { IUserDTO } from '../../infra/entities/User';
-import { RegisterUserUseCase } from './RegiserUserUseCase';
+import { RegisterUserUseCase } from './RegisterUserUseCase';
 
 class RegisterUserController {
   async handle(req: Request, res: Response): Promise<Response> {

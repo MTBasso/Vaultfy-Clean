@@ -7,8 +7,8 @@ import { RegisterUserUseCase } from './RegisterUserUseCase';
 class RegisterUserController {
   async handle(req: Request, res: Response): Promise<Response> {
     const { username, email, password }: IUserDTO = req.body;
-    const regiserUseCase = container.resolve(RegisterUserUseCase);
-    await regiserUseCase.execute({ username, email, password });
+    const registerUserUseCase = container.resolve(RegisterUserUseCase);
+    await registerUserUseCase.execute({ username, email, password });
     return res.status(201).json({ message: 'User Registered Successfully!' });
   }
 }

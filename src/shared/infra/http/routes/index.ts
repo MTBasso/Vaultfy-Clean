@@ -1,9 +1,11 @@
 import { Router } from 'express';
 
-import { registerRoutes } from './auth.routes';
+import { authRoutes } from './auth.routes';
+import { vaultRoutes } from './vault.routes';
 
 const router = Router();
 
-router.use('/auth', registerRoutes);
+router.use('/auth', authRoutes);
+router.use('/vault', vaultRoutes);
 
 export { router };

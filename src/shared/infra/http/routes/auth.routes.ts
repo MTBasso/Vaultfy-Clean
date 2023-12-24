@@ -4,15 +4,15 @@ import { RegisterUserController } from '../../../../modules/user/useCases/regist
 import { UserLoginController } from '../../../../modules/user/useCases/userLogin/UserLoginController';
 import { authenticateToken } from '../middleware/authMiddelware';
 
-const registerRoutes = Router();
+const authRoutes = Router();
 
 const registerUserController = new RegisterUserController();
 const userLoginController = new UserLoginController();
 
-registerRoutes.post('/register', registerUserController.handle);
-registerRoutes.post('/login', userLoginController.handle);
-registerRoutes.get('/test', authenticateToken, (req: Request, res: Response) => {
+authRoutes.post('/register', registerUserController.handle);
+authRoutes.post('/login', userLoginController.handle);
+authRoutes.get('/test', authenticateToken, (req: Request, res: Response) => {
   res.status(200).json({ message: `tested, here is the user id: ${req.user?.id}` });
 });
 
-export { registerRoutes };
+export { authRoutes };

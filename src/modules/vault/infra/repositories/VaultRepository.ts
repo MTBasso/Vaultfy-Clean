@@ -1,5 +1,4 @@
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
-// import { User } from '../../../user/infra/entities/User';
 import { IVaultDTO } from '../entities/Vault';
 import { IVaultRepository } from './IVaultRepository';
 

@@ -9,8 +9,8 @@ class RegisterUserUseCase {
     null;
   }
 
-  async execute({ username, email, password }: IUserDTO): Promise<void> {
-    await this.userRepository.register({ username, email, password });
+  async execute(user: IUserDTO): Promise<void> {
+    await this.userRepository.register(user);
   }
 }
 

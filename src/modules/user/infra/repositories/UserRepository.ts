@@ -14,7 +14,7 @@ class UserRepository implements IUserRepository {
         username,
         email,
         password: hashedPassword,
-        secret: generateSecret()
+        secret: generateSecret(35)
       }
     });
   }
@@ -25,7 +25,6 @@ class UserRepository implements IUserRepository {
     const passwordMatch = await compareHash(password, user.password);
     if (passwordMatch === false) return;
     const token = sign({ userId: user.id }, 'SUPER-SECRET-KEY');
-    console.log(token);
     return token;
   }
 }

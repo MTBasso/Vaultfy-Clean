@@ -9,7 +9,7 @@ class User {
   username!: string;
   email!: string;
   password!: string;
-  secret?: string;
+  secret!: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -11,7 +11,7 @@ class CreateVaultController {
     if (!userId) return res.status(401).json({ error: 'error' });
     const createVaultUseCase = container.resolve(CreateVaultUseCase);
     await createVaultUseCase.execute({ userId, name });
-    return res.status(201).json({ message: 'vault created' });
+    return res.status(201).json({ message: 'Vault Created' });
   }
 }
 

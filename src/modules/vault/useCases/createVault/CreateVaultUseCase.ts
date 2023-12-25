@@ -9,8 +9,8 @@ class CreateVaultUseCase {
     null;
   }
 
-  async execute({ userId, name }: IVaultDTO): Promise<void> {
-    await this.vaultRepository.register({ userId, name });
+  async execute(vault: IVaultDTO): Promise<void> {
+    await this.vaultRepository.register(vault);
   }
 }
 

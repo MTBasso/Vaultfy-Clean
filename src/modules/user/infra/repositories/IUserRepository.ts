@@ -1,8 +1,8 @@
 import { IUserDTO } from '../entities/User';
 
 interface IUserRepository {
-  register(user: IUserDTO): Promise<void>;
-  login(user: IUserDTO): Promise<string | null>;
+  register(user: IUserDTO): Promise<IUserDTO>;
+  login(user: IUserDTO): Promise<string>;
 }
 
 export { IUserRepository };

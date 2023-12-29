@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { BadRequestError } from '../../../../shared/errors/Error';
 import { UpdateVaultUseCase } from './UpdateVaultUseCase';
 
 class UpdateVaultController {
@@ -8,6 +9,7 @@ class UpdateVaultController {
     const updatedVaultUseCase = container.resolve(UpdateVaultUseCase);
     const id = req.params.id;
     const { name } = req.body;
+    if (!id || !name) throw new BadRequestError('Missing fields in request');
     await updatedVaultUseCase.execute(id, name);
     return res.status(200).json({ message: 'Vault Updated' });
   }

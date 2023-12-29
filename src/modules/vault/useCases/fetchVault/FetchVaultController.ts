@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { NotFoundError } from '../../../../shared/errors/Error';
 import { FetchVaultUseCase } from './FetchVaultUseCase';
 
 class FetchVaultController {
@@ -8,7 +9,7 @@ class FetchVaultController {
     const id: string = req.params.id;
     const fetchVaultUseCase = container.resolve(FetchVaultUseCase);
     const vault = await fetchVaultUseCase.execute(id);
-    if (!vault) return res.status(401).json({ message: 'Vault not Found' });
+    if (!vault) throw new NotFoundError('Vault not found');
     return res.status(200).json({ message: 'Vault Fetched Succesfully', vault: vault });
   }
 }

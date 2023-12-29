@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { UnauthorizedError } from '../../../../shared/errors/Error';
 import { encrypt } from '../../../../utils/encryption';
 import { UpdateCredentialUseCase } from './UpdateCredentialUseCase';
 
@@ -11,7 +12,7 @@ class UpdateCredentialController {
     const { service, username } = req.body;
     let { password } = req.body;
     const user = req.user;
-    if (!user) return res.status(500);
+    if (!user) throw new UnauthorizedError('Unauthorized');
     password = encrypt(password, user.secret);
     const updatedCredential = await updateCredentialUseCase.execute(id, { service, username, password });
     return res.status(200).json({ message: 'Credential Updated', credential: updatedCredential });

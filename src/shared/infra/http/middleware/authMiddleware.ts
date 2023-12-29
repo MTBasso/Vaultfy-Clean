@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
+import { NotFoundError, UnauthorizedError } from '../../../errors/Error';
 import { prisma } from '../../prisma/prismaClient';
 
 export interface DecodedUser {
@@ -13,14 +14,12 @@ export interface DecodedUser {
 const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   const authToken = req.cookies.token;
   if (!authToken) {
-    const error = new Error('Authorization header missing');
-    return next(error);
+    throw new UnauthorizedError('Authorization header missing');
   }
   const decoded = verify(authToken, 'SUPER-SECRET-KEY') as DecodedUser;
   const user = await prisma.user.findUnique({ where: { email: decoded.email } });
   if (!user) {
-    const authError = new Error('User not found');
-    return next(authError);
+    throw new NotFoundError('User not found');
   }
   req.user = user;
   next();

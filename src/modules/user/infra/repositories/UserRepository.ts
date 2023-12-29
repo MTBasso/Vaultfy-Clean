@@ -1,15 +1,16 @@
 import { sign } from 'jsonwebtoken';
 
+import { ApiError, BadRequestError, NotFoundError, UnauthorizedError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { compareHash, generateSecret, hashString } from '../../../../utils/encryption';
 import { IUserDTO } from '../entities/User';
 import { IUserRepository } from './IUserRepository';
 
 class UserRepository implements IUserRepository {
-  async register({ username, email, password }: IUserDTO): Promise<void> {
-    if (!username) throw new Error('Username is required');
+  async register({ username, email, password }: IUserDTO): Promise<IUserDTO> {
+    if (!username || !email || !password) throw new BadRequestError('Missing fields in request');
     const hashedPassword = await hashString(password);
-    await prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         username,
         email,
@@ -17,21 +18,19 @@ class UserRepository implements IUserRepository {
         secret: generateSecret(35)
       }
     });
+    if (!createdUser) throw new ApiError('Error while creating the user', 500);
+    return createdUser;
   }
 
-  async login({ email, password }: IUserDTO): Promise<string | null> {
-    const token = sign({ email }, 'SUPER-SECRET-KEY');
+  async login({ email, password }: IUserDTO): Promise<string> {
+    if (!email || !password) throw new BadRequestError('Missing fields in request');
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return null;
+    if (!user) throw new NotFoundError('User not found, this email is not in use yet');
     const passwordMatch = await compareHash(password, user.password);
-    if (passwordMatch === false) return null;
+    if (passwordMatch === false) throw new UnauthorizedError('Password is incorrect');
+    const token = sign({ email }, 'SUPER-SECRET-KEY');
+    if (!token) throw new ApiError('Error while signing token', 500);
     return token;
-  }
-
-  async fetch(id: string): Promise<IUserDTO | null> {
-    const user = await prisma.user.findUnique({ where: { id } });
-    if (!user) return null;
-    return user;
   }
 }
 

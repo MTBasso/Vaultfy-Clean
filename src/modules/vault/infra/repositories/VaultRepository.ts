@@ -1,3 +1,4 @@
+import { ApiError, BadRequestError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { IVaultDTO } from '../entities/Vault';
 import { IVaultRepository } from './IVaultRepository';
@@ -14,16 +15,20 @@ export interface IVaultAndCredentialsDTO {
 }
 
 class VaultRepository implements IVaultRepository {
-  async register({ userId, name }: IVaultDTO): Promise<void> {
-    await prisma.vault.create({
+  async register({ userId, name }: IVaultDTO): Promise<IVaultDTO> {
+    if (!userId || !name) throw new BadRequestError('Missing fields in request');
+    const createdVault = await prisma.vault.create({
       data: {
         userId,
         name
       }
     });
+    if (!createdVault) throw new ApiError('Error while creating vault', 500);
+    return createdVault;
   }
 
-  async findByIdAndListCredentials(id: string): Promise<IVaultAndCredentialsDTO | null> {
+  async findByIdAndListCredentials(id: string): Promise<IVaultAndCredentialsDTO> {
+    if (!id) throw new BadRequestError('Missing id in request');
     const vaultQuery = await prisma.vault.findMany({
       where: { id },
       include: {
@@ -39,7 +44,7 @@ class VaultRepository implements IVaultRepository {
         }
       }
     });
-    if (!vaultQuery) return null;
+    if (!vaultQuery) throw new NotFoundError('Vault not found');
     const vault: IVaultAndCredentialsDTO[] = vaultQuery.map((originalItem) => {
       const { credential, ...rest } = originalItem;
       return {
@@ -54,14 +59,15 @@ class VaultRepository implements IVaultRepository {
     return vault[0];
   }
 
-  async findByIdAndUpdate(id: string, name: string): Promise<IVaultDTO | void> {
-    if (!name) return;
+  async findByIdAndUpdate(id: string, name: string): Promise<IVaultDTO> {
+    if (!id || !name) throw new BadRequestError('Missing fields in request');
     const updatedVault = await prisma.vault.update({
       where: { id },
       data: {
         name
       }
     });
+    if (!updatedVault) throw new NotFoundError('Vault not found');
     return updatedVault;
   }
 

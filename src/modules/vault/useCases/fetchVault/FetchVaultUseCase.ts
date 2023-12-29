@@ -10,7 +10,7 @@ class FetchVaultUseCase {
   }
 
   async execute(id: string): Promise<object | null> {
-    const vault = await this.vaultRepository.fetch(id);
+    const vault = await this.vaultRepository.findByIdAndListCredentials(id);
     if (!vault) return null;
     return vault;
   }

@@ -15,8 +15,7 @@ const deleteCredentialController = new DeleteCredentialController();
 
 credentialRoutes.post('/register', authenticateToken, createCredentialCrontroller.handle);
 credentialRoutes.get('/fetch/:id', authenticateToken, fetchCredentialController.handle);
-credentialRoutes.get('/fetch/:id', authenticateToken, fetchCredentialController.handle);
-credentialRoutes.put('/update', authenticateToken, updateCredentialController.handle);
+credentialRoutes.put('/update/:id', authenticateToken, updateCredentialController.handle);
 credentialRoutes.delete('/delete/:id', authenticateToken, deleteCredentialController.handle);
 
 export { credentialRoutes };

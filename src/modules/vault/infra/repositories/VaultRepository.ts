@@ -11,6 +11,30 @@ class VaultRepository implements IVaultRepository {
       }
     });
   }
+
+  async fetch(id: string): Promise<object | null> {
+    const vault = await prisma.vault.findMany({
+      where: { id },
+      include: {
+        credential: {
+          where: {
+            vaultId: id
+          },
+          select: {
+            id: true,
+            service: true,
+            username: true
+          }
+        }
+      }
+    });
+    if (!vault) return null;
+    return vault;
+  }
+
+  // async update({ }) { }
+
+  // async destroy({ }) { }
 }
 
 export { VaultRepository };

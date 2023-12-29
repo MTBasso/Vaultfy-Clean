@@ -19,13 +19,19 @@ class UserRepository implements IUserRepository {
     });
   }
 
-  async login({ email, password }: IUserDTO): Promise<string | void> {
+  async login({ email, password }: IUserDTO): Promise<string | null> {
+    const token = sign({ email }, 'SUPER-SECRET-KEY');
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return;
+    if (!user) return null;
     const passwordMatch = await compareHash(password, user.password);
-    if (passwordMatch === false) return;
-    const token = sign({ userId: user.id }, 'SUPER-SECRET-KEY');
+    if (passwordMatch === false) return null;
     return token;
+  }
+
+  async fetch(id: string): Promise<IUserDTO | null> {
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) return null;
+    return user;
   }
 }
 

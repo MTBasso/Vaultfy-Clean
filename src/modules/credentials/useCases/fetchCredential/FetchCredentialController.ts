@@ -7,7 +7,7 @@ import { FetchCredentialUseCase } from './FetchCredentialUseCase';
 class FetchCredentialController {
   async handle(req: Request, res: Response): Promise<Response> {
     const fetchCredentialUseCase = container.resolve(FetchCredentialUseCase);
-    const { id } = req.body;
+    const id: string = req.params.id;
     if (!id) return res.status(401).json({ error: 'Missing Id in request' });
     const user = req.user;
     if (!user) return res.status(401).json({ error: 'Unauthorized' });

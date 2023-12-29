@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { IVaultDTO } from '../../infra/entities/Vault';
 import { CreateVaultUseCase } from './CreateVaultUseCase';
 
 class CreateVaultController {
   async handle(req: Request, res: Response): Promise<Response> {
-    const { name }: IVaultDTO = req.body;
+    const name: string = req.body.name;
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ error: 'error' });
     const createVaultUseCase = container.resolve(CreateVaultUseCase);

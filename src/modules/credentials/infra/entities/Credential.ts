@@ -2,7 +2,7 @@ import { Vault } from '../../../vault/infra/entities/Vault';
 
 export interface ICredentialDTO {
   id?: string;
-  vaultId: string;
+  vaultId?: string;
   service: string;
   username: string;
   password: string;

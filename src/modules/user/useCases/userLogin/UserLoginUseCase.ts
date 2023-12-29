@@ -9,8 +9,9 @@ class UserLoginUseCase {
     null;
   }
 
-  async execute({ email, password }: IUserDTO): Promise<void | string> {
+  async execute({ email, password }: IUserDTO): Promise<string> {
     const token = await this.userRepository.login({ email, password });
+    if (!token) throw new Error('Error While loggin in');
     return token;
   }
 }

@@ -4,15 +4,14 @@ import { ICredentialDTO } from '../../infra/entities/Credential';
 import { ICredentialRepository } from '../../infra/repositories/ICredentialRepository';
 
 @injectable()
-class FetchCredentialUseCase {
+class UpdateCredentialUseCase {
   constructor(@inject('CredentialRepository') private credentialRepository: ICredentialRepository) {
     null;
   }
 
-  async execute(id: string): Promise<ICredentialDTO | null> {
-    const fetchedCredential = await this.credentialRepository.findById(id);
-    return fetchedCredential;
+  async execute(id: string, credential: ICredentialDTO): Promise<void> {
+    await this.credentialRepository.findByIdAndUpdate(id, credential);
   }
 }
 
-export { FetchCredentialUseCase };
+export { UpdateCredentialUseCase };

@@ -1,6 +1,11 @@
 import { sign } from 'jsonwebtoken';
 
-import { ApiError, BadRequestError, NotFoundError, UnauthorizedError } from '../../../../shared/errors/Error';
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError
+} from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { compareHash, generateSecret, hashString } from '../../../../utils/encryption';
 import { IUserDTO } from '../entities/User';
@@ -18,7 +23,7 @@ class UserRepository implements IUserRepository {
         secret: generateSecret(35)
       }
     });
-    if (!createdUser) throw new ApiError('Error while creating the user', 500);
+    if (!createdUser) throw new InternalServerError('Error while creating the user');
     return createdUser;
   }
 
@@ -29,7 +34,7 @@ class UserRepository implements IUserRepository {
     const passwordMatch = await compareHash(password, user.password);
     if (passwordMatch === false) throw new UnauthorizedError('Password is incorrect');
     const token = sign({ email }, 'SUPER-SECRET-KEY');
-    if (!token) throw new ApiError('Error while signing token', 500);
+    if (!token) throw new InternalServerError('Error while generating the token');
     return token;
   }
 }

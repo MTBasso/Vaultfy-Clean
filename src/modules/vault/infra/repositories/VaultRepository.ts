@@ -1,4 +1,4 @@
-import { ApiError, BadRequestError, NotFoundError } from '../../../../shared/errors/Error';
+import { BadRequestError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { IVaultDTO } from '../entities/Vault';
 import { IVaultRepository } from './IVaultRepository';
@@ -23,7 +23,7 @@ class VaultRepository implements IVaultRepository {
         name
       }
     });
-    if (!createdVault) throw new ApiError('Error while creating vault', 500);
+    if (!createdVault) throw new InternalServerError('Error while creating vault');
     return createdVault;
   }
 

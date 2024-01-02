@@ -1,9 +1,10 @@
 import 'express-async-errors';
 import 'reflect-metadata';
+import { CelebrateError, errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
-import express, { json } from 'express';
+import express, { Request, Response, json } from 'express';
 
-import { errorMiddleware } from './middleware/errorMiddleware';
+import { ApiError } from '../../errors/Error';
 import { router } from './routes';
 
 import '../../container';
@@ -14,7 +15,19 @@ const port = 5000;
 app.use(json());
 app.use(cookieParser());
 app.use(router);
-app.use(errorMiddleware);
+app.use(errors());
+app.use((err: Error, req: Request, res: Response) => {
+  if (err instanceof CelebrateError) {
+    return res.status(400).json({ message: err.details.get('body')?.message });
+  }
+  if (err instanceof ApiError) {
+    const statusCode = err.statusCode;
+    return res.status(statusCode).json({
+      status: err.name,
+      message: err.message
+    });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

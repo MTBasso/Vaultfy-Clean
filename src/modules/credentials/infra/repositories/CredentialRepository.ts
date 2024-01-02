@@ -1,4 +1,4 @@
-import { ApiError, BadRequestError, NotFoundError } from '../../../../shared/errors/Error';
+import { BadRequestError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { ICredentialDTO } from '../entities/Credential';
 import { ICredentialRepository } from './ICredentialRepository';
@@ -14,12 +14,11 @@ class CredentialRepository implements ICredentialRepository {
         password
       }
     });
-    if (!credential) throw new ApiError('Error while creating credential', 500);
+    if (!credential) throw new InternalServerError('Error while creating credential');
     return credential;
   }
 
   async findById(id: string): Promise<ICredentialDTO> {
-    if (!id) throw new BadRequestError('Missing id in request');
     const credential = await prisma.credential.findUnique({
       where: {
         id

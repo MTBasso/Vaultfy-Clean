@@ -61,3 +61,4 @@ dist
 lib
 
 *.md
+jest.config.ts

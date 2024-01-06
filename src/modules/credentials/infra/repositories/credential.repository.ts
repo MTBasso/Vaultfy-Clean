@@ -1,7 +1,7 @@
 import { BadRequestError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
-import { ICredentialDTO } from '../entities/Credential';
-import { ICredentialRepository } from './ICredentialRepository';
+import { ICredentialDTO } from '../entities/credential.entity';
+import { ICredentialRepository } from './credential.repository.interface';
 
 class CredentialRepository implements ICredentialRepository {
   async register({ vaultId, service, username, password }: ICredentialDTO): Promise<ICredentialDTO> {

@@ -1,4 +1,4 @@
-import { Vault } from '../../../vault/infra/entities/Vault';
+import { Vault } from '../../../vault/infra/entities/vault.entity';
 
 export interface ICredentialDTO {
   id?: string;

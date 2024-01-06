@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IVaultDTO } from '../../infra/entities/Vault';
-import { IVaultRepository } from '../../infra/repositories/IVaultRepository';
+import { IVaultDTO } from '../../infra/entities/vault.entity';
+import { IVaultRepository } from '../../infra/repositories/vault.repository.interface';
 
 @injectable()
 class CreateVaultUseCase {

@@ -1,4 +1,4 @@
-import { ICredentialDTO } from '../entities/Credential';
+import { ICredentialDTO } from '../entities/credential.entity';
 
 interface ICredentialRepository {
   register(credential: ICredentialDTO): Promise<ICredentialDTO>;

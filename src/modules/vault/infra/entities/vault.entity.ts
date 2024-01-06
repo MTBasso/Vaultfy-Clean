@@ -1,4 +1,4 @@
-import { User } from '../../../user/infra/entities/User';
+import { User } from '../../../user/infra/entities/user.entity';
 
 export interface IVaultDTO {
   userId: string;

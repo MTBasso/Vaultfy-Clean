@@ -23,7 +23,7 @@ model Vault {
   id         String       @id @default(cuid())
   name       String
   credential Credential[]
-  User       User         @relation(fields: [userId], references: [id])
+  User       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
 }
 
@@ -32,6 +32,6 @@ model Credential {
   service  String
   username String
   password String
-  Vault    Vault  @relation(fields: [vaultId], references: [id])
+  Vault    Vault  @relation(fields: [vaultId], references: [id], onDelete: Cascade)
   vaultId  String
 }

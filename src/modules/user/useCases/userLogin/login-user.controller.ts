@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { IUserDTO } from '../../infra/entities/User';
+import { IUserDTO } from '../../infra/entities/user.entity';
 import { UserLoginUseCase } from './UserLoginUseCase';
 
 class UserLoginController {

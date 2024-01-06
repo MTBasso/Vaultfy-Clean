@@ -1,4 +1,4 @@
-import { IUserDTO } from '../entities/User';
+import { IUserDTO } from '../entities/user.entity';
 
 interface IUserRepository {
   register(user: IUserDTO): Promise<IUserDTO>;

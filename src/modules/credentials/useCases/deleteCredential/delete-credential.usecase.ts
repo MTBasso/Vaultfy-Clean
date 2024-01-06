@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { ICredentialRepository } from '../../infra/repositories/ICredentialRepository';
+import { ICredentialRepository } from '../../infra/repositories/credential.repository.interface';
 
 @injectable()
 class DeleteCredentialUseCase {

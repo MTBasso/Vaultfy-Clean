@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "typeRoots": ["./src/shared/infra/http/types/", "./node_modules/@types"],
+    "target": "es6",
     "module": "commonjs",
+    "jsx": "react",
     "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -9,7 +11,8 @@
     "strict": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "typeRoots": ["./src/shared/infra/http/types/", "./node_modules/@types"]
-  }
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules"]
 }

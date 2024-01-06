@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IUserDTO } from '../../infra/entities/User';
-import { IUserRepository } from '../../infra/repositories/IUserRepository';
+import { IUserDTO } from '../../infra/entities/user.entity';
+import { IUserRepository } from '../../infra/repositories/user.repository.interface';
 
 @injectable()
 class UserLoginUseCase {

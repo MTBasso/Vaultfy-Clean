@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IVaultRepository } from '../../infra/repositories/IVaultRepository';
+import { IVaultRepository } from '../../infra/repositories/vault.repository.interface';
 
 @injectable()
 class UpdateVaultUseCase {

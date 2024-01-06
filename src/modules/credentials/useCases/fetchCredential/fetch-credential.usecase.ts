@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import { ICredentialDTO } from '../../infra/entities/Credential';
-import { ICredentialRepository } from '../../infra/repositories/ICredentialRepository';
+import { ICredentialDTO } from '../../infra/entities/credential.entity';
+import { ICredentialRepository } from '../../infra/repositories/credential.repository.interface';
 
 @injectable()
 class FetchCredentialUseCase {

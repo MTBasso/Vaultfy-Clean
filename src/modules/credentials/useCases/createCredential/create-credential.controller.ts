@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import { UnauthorizedError } from '../../../../shared/errors/Error';
 import { encrypt } from '../../../../utils/encryption';
-import { ICredentialDTO } from '../../infra/entities/Credential';
+import { ICredentialDTO } from '../../infra/entities/credential.entity';
 import { CreateCredentialUseCase } from './CreateCredentialUseCase';
 
 class CreateCredentialController {

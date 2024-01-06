@@ -1,7 +1,7 @@
 import { BadRequestError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
-import { IVaultDTO } from '../entities/Vault';
-import { IVaultRepository } from './IVaultRepository';
+import { IVaultDTO } from '../entities/vault.entity';
+import { IVaultRepository } from './vault.repository.interface';
 
 export interface IVaultAndCredentialsDTO {
   id: string;

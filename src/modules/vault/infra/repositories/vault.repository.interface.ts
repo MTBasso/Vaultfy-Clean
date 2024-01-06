@@ -1,5 +1,5 @@
-import { IVaultDTO } from '../entities/Vault';
-import { IVaultAndCredentialsDTO } from './VaultRepository';
+import { IVaultDTO } from '../entities/vault.entity';
+import { IVaultAndCredentialsDTO } from './vault.repository';
 
 interface IVaultRepository {
   register({ userId, name }: IVaultDTO): Promise<IVaultDTO>;

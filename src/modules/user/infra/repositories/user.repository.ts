@@ -8,8 +8,8 @@ import {
 } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { compareHash, generateSecret, hashString } from '../../../../utils/encryption';
-import { IUserDTO } from '../entities/User';
-import { IUserRepository } from './IUserRepository';
+import { IUserDTO } from '../entities/user.entity';
+import { IUserRepository } from './user.repository.interface';
 
 class UserRepository implements IUserRepository {
   async register({ username, email, password }: IUserDTO): Promise<IUserDTO> {

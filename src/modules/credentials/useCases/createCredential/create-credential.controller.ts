@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 import { UnauthorizedError } from '../../../../shared/errors/Error';
 import { encrypt } from '../../../../utils/encryption';
 import { ICredentialDTO } from '../../infra/entities/credential.entity';
-import { CreateCredentialUseCase } from './CreateCredentialUseCase';
+import { CreateCredentialUseCase } from './create-credential.usecase';
 
 class CreateCredentialController {
   async handle(req: Request, res: Response): Promise<Response> {
@@ -13,7 +13,6 @@ class CreateCredentialController {
     const user = req.user;
     if (!user) throw new UnauthorizedError('Unauthorized');
     password = encrypt(password, user.secret);
-    console.log(password);
     const createCredentialUseCase = container.resolve(CreateCredentialUseCase);
     const createdCreadential = await createCredentialUseCase.execute({ vaultId, service, username, password });
     return res.status(201).json({ message: 'Credential Created', credential: createdCreadential });

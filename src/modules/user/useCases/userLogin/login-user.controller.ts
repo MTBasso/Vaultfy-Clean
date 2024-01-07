@@ -1,17 +1,24 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { BadRequestError, ConflictError, InternalServerError } from '../../../../shared/errors/Error';
 import { IUserDTO } from '../../infra/entities/user.entity';
-import { UserLoginUseCase } from './UserLoginUseCase';
+import { UserLoginUseCase } from './login-user.usecase';
 
 class UserLoginController {
   async handle(req: Request, res: Response): Promise<Response> {
-    const { email, password }: IUserDTO = req.body;
-    const loginUseCase = container.resolve(UserLoginUseCase);
-    const token = await loginUseCase.execute({ email, password });
-    res.cookie('token', token);
-    console.log(req.cookies);
-    return res.status(200).json({ message: 'Logged In', token: token });
+    try {
+      const { email, password }: IUserDTO = req.body;
+      const loginUseCase = container.resolve(UserLoginUseCase);
+      const token = await loginUseCase.execute({ email, password });
+      res.cookie('token', token);
+      return res.status(200).json({ message: 'Logged In', token: token });
+    } catch (error) {
+      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError) {
+        throw error;
+      }
+      throw new InternalServerError('Unhandled Internal Server Error');
+    }
   }
 }
 

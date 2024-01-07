@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import { UnauthorizedError } from '../../../../shared/errors/Error';
 import { decrypt } from '../../../../utils/encryption';
-import { FetchCredentialUseCase } from './FetchCredentialUseCase';
+import { FetchCredentialUseCase } from './fetch-credential.usecase';
 
 class FetchCredentialController {
   async handle(req: Request, res: Response): Promise<Response> {

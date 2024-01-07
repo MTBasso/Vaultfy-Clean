@@ -2,6 +2,7 @@ import { sign } from 'jsonwebtoken';
 
 import {
   BadRequestError,
+  ConflictError,
   InternalServerError,
   NotFoundError,
   UnauthorizedError
@@ -13,18 +14,27 @@ import { IUserRepository } from './user.repository.interface';
 
 class UserRepository implements IUserRepository {
   async register({ username, email, password }: IUserDTO): Promise<IUserDTO> {
-    if (!username || !email || !password) throw new BadRequestError('Missing fields in request');
-    const hashedPassword = await hashString(password);
-    const createdUser = await prisma.user.create({
-      data: {
-        username,
-        email,
-        password: hashedPassword,
-        secret: generateSecret(35)
+    try {
+      if (!username || !email || !password) throw new BadRequestError('Missing fields in request');
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (user) throw new ConflictError('User with this email already exists');
+      const hashedPassword = await hashString(password);
+      const createdUser = await prisma.user.create({
+        data: {
+          username,
+          email,
+          password: hashedPassword,
+          secret: generateSecret(35)
+        }
+      });
+      if (!createdUser) throw new InternalServerError('Error while creating the user');
+      return createdUser;
+    } catch (error) {
+      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError) {
+        throw error;
       }
-    });
-    if (!createdUser) throw new InternalServerError('Error while creating the user');
-    return createdUser;
+      throw new InternalServerError('Error while creating the user');
+    }
   }
 
   async login({ email, password }: IUserDTO): Promise<string> {

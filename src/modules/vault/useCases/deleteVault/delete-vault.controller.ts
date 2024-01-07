@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { BadRequestError } from '../../../../shared/errors/Error';
-import { DeleteVaultUseCase } from './DeleteVaultUseCase';
+import { DeleteVaultUseCase } from './delete-vault.usecase';
 
 class DeleteVaultController {
   async handle(req: Request, res: Response): Promise<Response> {

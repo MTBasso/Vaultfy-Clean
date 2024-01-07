@@ -5,7 +5,7 @@ import { IUserRepository } from '../../infra/repositories/user.repository.interf
 
 @injectable()
 class UserLoginUseCase {
-  constructor(@inject('UserRepository') private userRepository: IUserRepository) {
+  constructor(@inject('UserRepository') private readonly userRepository: IUserRepository) {
     null;
   }
 

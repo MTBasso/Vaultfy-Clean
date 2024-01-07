@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { BadRequestError } from '../../../../shared/errors/Error';
-import { UpdateVaultUseCase } from './UpdateVaultUseCase';
+import { UpdateVaultUseCase } from './update-vault.usecase';
 
 class UpdateVaultController {
   async handle(req: Request, res: Response): Promise<Response> {

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { NotFoundError } from '../../../../shared/errors/Error';
-import { FetchVaultUseCase } from './FetchVaultUseCase';
+import { FetchVaultUseCase } from './fetch-vault.usecase';
 
 class FetchVaultController {
   async handle(req: Request, res: Response): Promise<Response> {

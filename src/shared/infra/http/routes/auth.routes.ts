@@ -1,9 +1,9 @@
 import { celebrate } from 'celebrate';
 import { Router } from 'express';
 
-import { RegisterUserController } from '../../../../modules/user/useCases/registerUser/RegisterUserController';
+import { RegisterUserController } from '../../../../modules/user/useCases/registerUser/register-user.controller';
 import { registerValidator } from '../../../../modules/user/useCases/registerUser/validator';
-import { UserLoginController } from '../../../../modules/user/useCases/userLogin/UserLoginController';
+import { UserLoginController } from '../../../../modules/user/useCases/userLogin/login-user.controller';
 import { loginValidator } from '../../../../modules/user/useCases/userLogin/validator';
 
 const authRoutes = Router();

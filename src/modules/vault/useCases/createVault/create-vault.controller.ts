@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { BadRequestError, UnauthorizedError } from '../../../../shared/errors/Error';
-import { CreateVaultUseCase } from './CreateVaultUseCase';
+import { CreateVaultUseCase } from './create-vault.usecase';
 
 class CreateVaultController {
   async handle(req: Request, res: Response): Promise<Response> {

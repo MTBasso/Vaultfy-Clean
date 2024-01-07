@@ -1,13 +1,13 @@
 import { celebrate } from 'celebrate';
 import { Router } from 'express';
 
-import { CreateCredentialController } from '../../../../modules/credentials/useCases/createCredential/CreateCredentialController';
+import { CreateCredentialController } from '../../../../modules/credentials/useCases/createCredential/create-credential.controller';
 import { createCredentialValidator } from '../../../../modules/credentials/useCases/createCredential/validator';
-import { DeleteCredentialController } from '../../../../modules/credentials/useCases/deleteCredential/DeleteCredentialController';
+import { DeleteCredentialController } from '../../../../modules/credentials/useCases/deleteCredential/delete-credential.controller';
 import { deleteCredentialValidator } from '../../../../modules/credentials/useCases/deleteCredential/validator';
-import { FetchCredentialController } from '../../../../modules/credentials/useCases/fetchCredential/FetchCredentialController';
+import { FetchCredentialController } from '../../../../modules/credentials/useCases/fetchCredential/fetch-credential.controller';
 import { fetchCredentialValidator } from '../../../../modules/credentials/useCases/fetchCredential/validator';
-import { UpdateCredentialController } from '../../../../modules/credentials/useCases/updateCredential/UpdateCredentialController';
+import { UpdateCredentialController } from '../../../../modules/credentials/useCases/updateCredential/update-credential.controller';
 import {
   updateCredentialBodyValidator,
   updateCredentialParamsValidator

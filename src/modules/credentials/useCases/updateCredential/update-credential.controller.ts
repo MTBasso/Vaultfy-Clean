@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import { UnauthorizedError } from '../../../../shared/errors/Error';
 import { encrypt } from '../../../../utils/encryption';
-import { UpdateCredentialUseCase } from './UpdateCredentialUseCase';
+import { UpdateCredentialUseCase } from './update-credential.usecase';
 
 class UpdateCredentialController {
   async handle(req: Request, res: Response): Promise<Response> {

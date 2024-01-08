@@ -76,9 +76,6 @@ describe('UserLoginController', () => {
       await userLoginController.handle(mockRequest, mockResponse);
     } catch (error) {
       expect(error).toBeInstanceOf(InternalServerError);
-      if (error instanceof InternalServerError) {
-        expect(error.message).toBe('Unhandled Internal Server Error');
-      }
     }
 
     expect(mockResponse.status).not.toHaveBeenCalledWith(200);

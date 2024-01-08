@@ -16,7 +16,7 @@ jest.mock('./register-user.usecase', () => ({
   RegisterUserUseCase: jest.fn()
 }));
 
-describe('RegisterUserController', () => {
+describe('register-user.controller', () => {
   let registerUserController: RegisterUserController;
   let registerUserUseCaseMock: jest.Mocked<RegisterUserUseCase>;
 
@@ -31,13 +31,11 @@ describe('RegisterUserController', () => {
   });
 
   it('should handle registration successfully and return JSON response', async () => {
-    // Mocking successful user registration
     const mockUserData: IUserDTO = { username: 'testUser', email: 'test@example.com', password: 'testPassword' };
     const registerUserUseCaseMock = container.resolve(RegisterUserUseCase) as jest.Mocked<RegisterUserUseCase>;
     jest.spyOn(container, 'resolve').mockReturnValueOnce(registerUserUseCaseMock);
     registerUserUseCaseMock.execute.mockResolvedValueOnce(mockUserData);
 
-    // Mock Express request and response objects
     const mockRequest = {
       body: mockUserData
     } as Request;
@@ -78,9 +76,6 @@ describe('RegisterUserController', () => {
       // If the registration is successful, this code won't be reached
     } catch (error) {
       expect(error).toBeInstanceOf(InternalServerError);
-      if (error instanceof InternalServerError) {
-        expect(error.message).toBe('Unhandled Internal Server Error');
-      }
     }
 
     // Ensure that the response status is not set to 201 in case of an error

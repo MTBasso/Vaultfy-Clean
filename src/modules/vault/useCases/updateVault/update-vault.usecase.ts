@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import { IVaultDTO } from '../../infra/entities/vault.entity';
 import { IVaultRepository } from '../../infra/repositories/vault.repository.interface';
 
 @injectable()
@@ -8,8 +9,9 @@ class UpdateVaultUseCase {
     null;
   }
 
-  async execute(id: string, name: string): Promise<void> {
-    await this.vaultRepository.findByIdAndUpdate(id, name);
+  async execute(id: string, name: string): Promise<IVaultDTO> {
+    const updatedVault = await this.vaultRepository.findByIdAndUpdate(id, name);
+    return updatedVault;
   }
 }
 

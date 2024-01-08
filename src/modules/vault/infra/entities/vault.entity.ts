@@ -1,7 +1,8 @@
 import { User } from '../../../user/infra/entities/user.entity';
 
 export interface IVaultDTO {
-  userId: string;
+  id?: string;
+  userId?: string;
   name: string;
 }
 

@@ -5,12 +5,13 @@ import { IVaultRepository } from '../../infra/repositories/vault.repository.inte
 
 @injectable()
 class CreateVaultUseCase {
-  constructor(@inject('VaultRepository') private vaultRepository: IVaultRepository) {
+  constructor(@inject('VaultRepository') private readonly vaultRepository: IVaultRepository) {
     null;
   }
 
-  async execute(vault: IVaultDTO): Promise<void> {
-    await this.vaultRepository.register(vault);
+  async execute(vault: IVaultDTO): Promise<IVaultDTO> {
+    const createdVault = await this.vaultRepository.register(vault);
+    return createdVault;
   }
 }
 

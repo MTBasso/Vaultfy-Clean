@@ -14,7 +14,7 @@ class UserLoginController {
       res.cookie('token', token);
       return res.status(200).json({ message: 'Logged In', token: token });
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError) {
+      if (error instanceof (BadRequestError || InternalServerError || ConflictError)) {
         throw error;
       }
       throw new InternalServerError('Unhandled Internal Server Error');

@@ -14,7 +14,7 @@ class RegisterUserController {
       if (!createdUser) throw new InternalServerError('Internal server error while creating the user');
       return res.status(201).json({ message: 'User Registered Successfully!', user: createdUser });
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError) {
+      if (error instanceof (BadRequestError || InternalServerError || ConflictError)) {
         throw error;
       }
       throw new InternalServerError('Unhandled Internal Server Error');

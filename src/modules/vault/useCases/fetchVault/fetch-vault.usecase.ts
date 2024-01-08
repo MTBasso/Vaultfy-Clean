@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-// import { IVaultDTO } from '../../infra/entities/Vault';
+import { NotFoundError } from '../../../../shared/errors/Error';
+import { IVaultAndCredentialsDTO } from '../../infra/repositories/vault.repository';
 import { IVaultRepository } from '../../infra/repositories/vault.repository.interface';
 
 @injectable()
@@ -9,9 +10,9 @@ class FetchVaultUseCase {
     null;
   }
 
-  async execute(id: string): Promise<object | null> {
+  async execute(id: string): Promise<IVaultAndCredentialsDTO> {
     const vault = await this.vaultRepository.findByIdAndListCredentials(id);
-    if (!vault) return null;
+    if (!vault || vault === null) throw new NotFoundError('Vault not found');
     return vault;
   }
 }

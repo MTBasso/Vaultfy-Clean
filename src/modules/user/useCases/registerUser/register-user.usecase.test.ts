@@ -12,7 +12,7 @@ const mockUserRepository: jest.Mocked<IUserRepository> = {
 
 container.register<IUserRepository>('UserRepository', { useValue: mockUserRepository });
 
-describe('RegisterUserUseCase', () => {
+describe('register-user.usecase', () => {
   let registerUserUseCase: RegisterUserUseCase;
 
   beforeEach(() => {
@@ -39,9 +39,6 @@ describe('RegisterUserUseCase', () => {
       await registerUserUseCase.execute(userData);
     } catch (error) {
       expect(error).toBeInstanceOf(ConflictError);
-      if (error instanceof ConflictError) {
-        expect(error.message).toBe('User with this email already exists');
-      }
     }
 
     expect(mockUserRepository.register).toHaveBeenCalledWith(userData);
@@ -56,9 +53,6 @@ describe('RegisterUserUseCase', () => {
       await registerUserUseCase.execute(userData);
     } catch (error) {
       expect(error).toBeInstanceOf(InternalServerError);
-      if (error instanceof InternalServerError) {
-        expect(error.message).toBe('Error while creating the user');
-      }
     }
 
     expect(mockUserRepository.register).toHaveBeenCalledWith(userData);

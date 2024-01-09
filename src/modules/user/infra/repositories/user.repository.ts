@@ -27,7 +27,7 @@ class UserRepository implements IUserRepository {
           secret: generateSecret(35)
         }
       });
-      if (!createdUser) throw new InternalServerError('Error while creating the user');
+      if (!createdUser) throw new InternalServerError('Internal Prisma Error');
       return createdUser;
     } catch (error) {
       if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError) {

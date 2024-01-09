@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { NotFoundError } from '../../../../shared/errors/Error';
+import { BadRequestError, NotFoundError } from '../../../../shared/errors/Error';
 import { IVaultAndCredentialsDTO } from '../../infra/repositories/vault.repository';
 import { IVaultRepository } from '../../infra/repositories/vault.repository.interface';
 
@@ -11,6 +11,7 @@ class FetchVaultUseCase {
   }
 
   async execute(id: string): Promise<IVaultAndCredentialsDTO> {
+    if (!id) throw new BadRequestError('Missing id in request');
     const vault = await this.vaultRepository.findByIdAndListCredentials(id);
     if (!vault || vault === null) throw new NotFoundError('Vault not found');
     return vault;

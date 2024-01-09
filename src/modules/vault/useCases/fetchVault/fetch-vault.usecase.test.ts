@@ -42,7 +42,7 @@ describe('fetch-vault.usecase', () => {
     expect(result).toEqual(mockedVault);
   });
 
-  it('should throw a BadRequestError when midding id in request', async () => {
+  it('should throw a BadRequestError when missing id in request', async () => {
     const invalidVaultId = '';
 
     try {

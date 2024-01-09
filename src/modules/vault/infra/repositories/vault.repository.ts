@@ -77,6 +77,20 @@ class VaultRepository implements IVaultRepository {
   async findByIdAndUpdate(id: string, name: string): Promise<IVaultDTO> {
     try {
       if (!id || !name) throw new BadRequestError('Missing fields in request');
+      // try {
+      //   await prisma.credential.findUnique({
+      //     where: { id }
+      //   });
+      // } catch (error) {
+      //   throw new NotFoundError('Vault not found');
+      // }
+
+      const existingVault = await prisma.vault.findUnique({
+        where: { id }
+      });
+
+      if (!existingVault) throw new NotFoundError('Vault not found');
+
       const updatedVault = await prisma.vault.update({
         where: { id },
         data: {

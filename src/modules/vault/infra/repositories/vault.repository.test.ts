@@ -101,25 +101,31 @@ describe('VaultRepository', () => {
 
   describe('findByIdAndUpdate', () => {
     it('should find vault by id and update', async () => {
-      const mockedVault = {
+      const initialVault = {
         id: 'mockedVaultId',
         userId: 'mockedUserId',
-        name: 'Updated Vault'
+        name: 'Vault' // Initial name
       };
 
-      (prismaModule.prisma.vault.update as jest.Mock).mockResolvedValueOnce(mockedVault);
+      const updatedName = 'Updated Vault';
 
-      const result = await vaultRepository.findByIdAndUpdate(mockedVault.id, 'Updated Vault');
+      (prismaModule.prisma.vault.findUnique as jest.Mock).mockResolvedValueOnce(initialVault);
+      (prismaModule.prisma.vault.update as jest.Mock).mockResolvedValueOnce({
+        ...initialVault,
+        name: updatedName // Updated name
+      });
+
+      const result = await vaultRepository.findByIdAndUpdate(initialVault.id, updatedName);
 
       expect(prismaModule.prisma.vault.update).toHaveBeenCalledWith({
-        where: { id: mockedVault.id },
-        data: { name: 'Updated Vault' }
+        where: { id: initialVault.id },
+        data: { name: updatedName }
       });
 
       expect(result).toEqual({
-        id: mockedVault.id,
-        userId: mockedVault.userId,
-        name: 'Updated Vault'
+        id: initialVault.id,
+        userId: initialVault.userId,
+        name: updatedName
       });
     });
 

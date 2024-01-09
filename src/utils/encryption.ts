@@ -1,5 +1,5 @@
 import { hash, compare } from 'bcryptjs';
-import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 
 async function hashString(string: string): Promise<string> {
   return await hash(string, 10);
@@ -26,8 +26,7 @@ function encrypt(text: string, passphrase: string): string {
 
 function decrypt(ciphertext: string, passphrase: string): string {
   const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-  const originalText = bytes.toString(CryptoJS.enc.Utf8);
-  return originalText;
+  return bytes.toString(CryptoJS.enc.Utf8);
 }
 
 export { hashString, compareHash, generateSecret, encrypt, decrypt };

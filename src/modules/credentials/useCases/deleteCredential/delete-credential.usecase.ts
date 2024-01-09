@@ -4,7 +4,7 @@ import { ICredentialRepository } from '../../infra/repositories/credential.repos
 
 @injectable()
 class DeleteCredentialUseCase {
-  constructor(@inject('CredentialRepository') private credentialRepository: ICredentialRepository) {
+  constructor(@inject('CredentialRepository') private readonly credentialRepository: ICredentialRepository) {
     null;
   }
 

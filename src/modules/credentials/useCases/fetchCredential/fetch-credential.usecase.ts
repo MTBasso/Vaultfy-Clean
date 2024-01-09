@@ -5,11 +5,11 @@ import { ICredentialRepository } from '../../infra/repositories/credential.repos
 
 @injectable()
 class FetchCredentialUseCase {
-  constructor(@inject('CredentialRepository') private credentialRepository: ICredentialRepository) {
+  constructor(@inject('CredentialRepository') private readonly credentialRepository: ICredentialRepository) {
     null;
   }
 
-  async execute(id: string): Promise<ICredentialDTO | null> {
+  async execute(id: string): Promise<ICredentialDTO> {
     const fetchedCredential = await this.credentialRepository.findById(id);
     return fetchedCredential;
   }

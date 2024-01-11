@@ -43,7 +43,7 @@ class UserRepository implements IUserRepository {
     if (!user) throw new NotFoundError('User not found, this email is not in use yet');
     const passwordMatch = await compareHash(password, user.password);
     if (passwordMatch === false) throw new UnauthorizedError('Password is incorrect');
-    const token = sign({ email }, 'SUPER-SECRET-KEY');
+    const token = sign({ email }, process.env.JWT_SECRET as string);
     if (!token) throw new InternalServerError('Error while generating the token');
     return token;
   }

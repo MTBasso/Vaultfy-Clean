@@ -1,5 +1,6 @@
 import 'express-async-errors';
 import 'reflect-metadata';
+import 'dotenv/config';
 import { CelebrateError, errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
 import express, { Request, Response, json } from 'express';

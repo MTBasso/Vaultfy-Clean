@@ -16,7 +16,7 @@ const authenticateToken = async (req: Request, res: Response, next: NextFunction
   if (!authToken) {
     throw new UnauthorizedError('Authorization header missing');
   }
-  const decoded = verify(authToken, 'SUPER-SECRET-KEY') as DecodedUser;
+  const decoded = verify(authToken, process.env.JWT_SECRET as string) as DecodedUser;
   const user = await prisma.user.findUnique({ where: { email: decoded.email } });
   if (!user) {
     throw new NotFoundError('User not found');

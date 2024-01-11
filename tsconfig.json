@@ -3,7 +3,6 @@
     "typeRoots": ["./src/shared/infra/http/types/", "./node_modules/@types"],
     "target": "es6",
     "module": "commonjs",
-    "jsx": "react",
     "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,

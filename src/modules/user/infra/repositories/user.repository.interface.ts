@@ -4,7 +4,7 @@ import { IUserAndVaultsDTO } from './user.repository';
 interface IUserRepository {
   register(user: IUserDTO): Promise<IUserDTO>;
   login(user: IUserDTO): Promise<string>;
-  listVaults(id: string): Promise<IUserAndVaultsDTO>;
+  listVaults(inputId: string): Promise<IUserAndVaultsDTO>;
 }
 
 export { IUserRepository };

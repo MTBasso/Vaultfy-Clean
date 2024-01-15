@@ -64,11 +64,11 @@ class UserRepository implements IUserRepository {
     }
   }
 
-  async listVaults(id: string): Promise<IUserAndVaultsDTO> {
+  async listVaults(inputId: string): Promise<IUserAndVaultsDTO> {
     try {
-      if (!id) throw new BadRequestError('Missing Id in request');
+      if (!inputId) throw new BadRequestError('Missing Id in request');
       const userQuery = await prisma.user.findMany({
-        where: { id },
+        where: { id: inputId },
         include: {
           vault: {
             select: {
@@ -79,18 +79,21 @@ class UserRepository implements IUserRepository {
         }
       });
       if (!userQuery || userQuery === null) throw new NotFoundError('User not found');
-      const user: IUserAndVaultsDTO[] = userQuery.map((originalItem) => {
-        const { vault, ...rest } = originalItem;
+      const userWithVaults = userQuery.map((originalItem) => {
+        const { id, username, email, vault } = originalItem;
+        const sanitizedVaults = vault.map((vaultItem) => ({
+          id: vaultItem.id,
+          name: vaultItem.name
+        }));
         return {
-          ...rest,
-          vault: vault.map((vaultItem) => ({
-            id: vaultItem.id,
-            name: vaultItem.name
-          }))
+          id,
+          username,
+          email,
+          vault: sanitizedVaults
         };
-      });
-      if (!user || user === null) throw new NotFoundError('User not found');
-      return user[0];
+      })[0];
+      if (!userWithVaults) throw new NotFoundError('User not found');
+      return userWithVaults;
     } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) throw error;
       throw new InternalServerError('Internal Server Error');

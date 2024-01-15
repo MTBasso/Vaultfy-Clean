@@ -67,9 +67,7 @@ class VaultRepository implements IVaultRepository {
       if (!vault || vault === null) throw new NotFoundError('Vault not found');
       return vault[0];
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof NotFoundError) {
-        throw error;
-      }
+      if (error instanceof BadRequestError || error instanceof NotFoundError) throw error;
       throw new InternalServerError('Internal Server Error');
     }
   }
@@ -77,14 +75,6 @@ class VaultRepository implements IVaultRepository {
   async findByIdAndUpdate(id: string, name: string): Promise<IVaultDTO> {
     try {
       if (!id || !name) throw new BadRequestError('Missing fields in request');
-      // try {
-      //   await prisma.credential.findUnique({
-      //     where: { id }
-      //   });
-      // } catch (error) {
-      //   throw new NotFoundError('Vault not found');
-      // }
-
       const existingVault = await prisma.vault.findUnique({
         where: { id }
       });

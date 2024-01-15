@@ -59,7 +59,7 @@ describe('fetch-vault.controller', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Vault Fetched Succesfully', vault: mockVault });
   });
 
-  it('should handle internal server error and throw InternalServerError', async () => {
+  it('should throw InternalServerError', async () => {
     fetchVaultUseCaseMock.execute.mockRejectedValueOnce(new InternalServerError('Some error'));
 
     const mockRequest = {
@@ -102,11 +102,10 @@ describe('fetch-vault.controller', () => {
   });
 
   it('should handle vault not found and throw NotFoundError', async () => {
-    const mockVaultId = 'testVaultId';
     fetchVaultUseCaseMock.execute.mockRejectedValueOnce(new NotFoundError('Internal Server Error'));
 
     const mockRequest = {
-      params: { id: mockVaultId }
+      params: { id: 'testVaultId' }
     } as unknown as Request;
 
     const mockResponse = {
@@ -117,7 +116,6 @@ describe('fetch-vault.controller', () => {
     try {
       await fetchVaultController.handle(mockRequest, mockResponse);
     } catch (error) {
-      console.error(error);
       expect(error).toBeInstanceOf(NotFoundError);
     }
 

@@ -14,7 +14,8 @@ jest.mock('../../../../shared/infra/prisma/prismaClient', () => ({
   prisma: {
     user: {
       create: jest.fn(),
-      findUnique: jest.fn()
+      findUnique: jest.fn(),
+      findMany: jest.fn()
     }
   }
 }));
@@ -167,24 +168,79 @@ describe('UserRepository', () => {
       const mockUser = {
         id: '1',
         username: 'testUser',
-        email: 'test@example.com',
+        email: 'testeracc@render.com',
         password: 'hashedPassword',
         secret: 'testSecret'
       };
+
       (prismaModule.prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
 
-      (encryptionModule.compareHash as jest.Mock).mockResolvedValueOnce(false);
-
-      const loginData = { email: mockUser.email, password: 'incorrectPassword' }; // input
+      const loginData = { email: mockUser.email, password: 'incorrectPassword' } as IUserDTO; // input
 
       try {
         await userRepository.login(loginData);
+        expect(prismaModule.prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: mockUser.email } });
+        (encryptionModule.compareHash as jest.Mock).mockResolvedValueOnce(false);
+        expect(encryptionModule.compareHash).toHaveBeenCalledWith(loginData.password, mockUser.password);
       } catch (error) {
+        console.error(error);
         expect(error).toBeInstanceOf(UnauthorizedError);
       }
+    });
+  });
 
-      expect(prismaModule.prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: loginData.email } });
-      expect(encryptionModule.compareHash).toHaveBeenCalledWith(loginData.password, mockUser.password);
+  describe('listVaults', () => {
+    it('should find a user by its id and list vaults', async () => {
+      const mockedVaults = [
+        { id: 'vault1', name: 'Vault1' },
+        { id: 'vault2', name: 'Vault2' }
+      ];
+      const mockCreatedUser = {
+        id: 'mockedUserId',
+        username: 'mockedUserUsername',
+        email: 'mockeduser@test.com',
+        vault: mockedVaults
+      };
+
+      (prismaModule.prisma.user.findMany as jest.Mock).mockResolvedValueOnce([mockCreatedUser]);
+
+      const result = await userRepository.listVaults(mockCreatedUser.id);
+
+      expect(prismaModule.prisma.user.findMany).toHaveBeenCalledWith({
+        where: { id: mockCreatedUser.id },
+        include: {
+          vault: {
+            select: { id: true, name: true }
+          }
+        }
+      });
+
+      expect(result).toEqual({
+        id: mockCreatedUser.id,
+        username: mockCreatedUser.username,
+        email: mockCreatedUser.email,
+        vault: mockedVaults
+      });
+    });
+
+    it('should throw BadRequestError when request is missing the id', async () => {
+      await expect(userRepository.listVaults('')).rejects.toThrow(BadRequestError);
+    });
+
+    it('should throw NotFoundError when user is not found', async () => {
+      (prismaModule.prisma.user.findMany as jest.Mock).mockResolvedValueOnce(null);
+
+      try {
+        await userRepository.listVaults('nonExistingId');
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundError);
+      }
+    });
+
+    it('should throw InternalServerError', async () => {
+      (prismaModule.prisma.user.findMany as jest.Mock).mockRejectedValueOnce(new Error('Unexpected Prisma error'));
+
+      await expect(userRepository.listVaults('mockedUserId')).rejects.toThrow(InternalServerError);
     });
   });
 });

@@ -5,7 +5,8 @@ import { UserLoginUseCase } from './login-user.usecase';
 
 const mockUserRepository: jest.Mocked<IUserRepository> = {
   register: jest.fn(),
-  login: jest.fn()
+  login: jest.fn(),
+  listVaults: jest.fn()
 };
 
 container.register<IUserRepository>('UserRepository', { useValue: mockUserRepository });

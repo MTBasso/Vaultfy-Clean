@@ -43,26 +43,22 @@ describe('fetch-vault.usecase', () => {
   });
 
   it('should throw a BadRequestError when missing id in request', async () => {
-    const invalidVaultId = '';
-
     try {
-      await fetchVaultUseCase.execute(invalidVaultId);
+      await fetchVaultUseCase.execute('');
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError);
     }
   });
 
   it('should throw NotFoundError when vault is not found', async () => {
-    const vaultId = 'nonExistentVaultId';
     vaultRepositoryMock.findByIdAndListCredentials.mockRejectedValueOnce(new NotFoundError('Vault not found'));
 
-    await expect(fetchVaultUseCase.execute(vaultId)).rejects.toThrow(NotFoundError);
+    await expect(fetchVaultUseCase.execute('nonExistentVaultId')).rejects.toThrow(NotFoundError);
   });
 
   it('should throw InternalServerError when repository fails', async () => {
-    const vaultId = 'testVaultId';
     vaultRepositoryMock.findByIdAndListCredentials.mockRejectedValueOnce(new InternalServerError('Some error'));
 
-    await expect(fetchVaultUseCase.execute(vaultId)).rejects.toThrow(InternalServerError);
+    await expect(fetchVaultUseCase.execute('testVaultId')).rejects.toThrow(InternalServerError);
   });
 });

@@ -24,18 +24,18 @@ describe('update-credential.usecase', () => {
 
   it('should update an existing credential', async () => {
     const id = 'mockedCredentialId';
-    const updatedCredential: ICredentialDTO = {
-      service: 'Updated Service',
-      username: 'Updated Username',
-      password: 'Updated Password'
+    const mockedCredential: ICredentialDTO = {
+      service: 'Service',
+      username: 'Username',
+      password: 'Password'
     };
 
-    credentialRepositoryMock.findByIdAndUpdate.mockResolvedValueOnce(updatedCredential);
+    credentialRepositoryMock.findByIdAndUpdate.mockResolvedValueOnce(mockedCredential);
 
-    const result = await updateCredentialUseCase.execute(id, updatedCredential);
+    const result = await updateCredentialUseCase.execute(id, mockedCredential);
 
-    expect(credentialRepositoryMock.findByIdAndUpdate).toHaveBeenCalledWith(id, updatedCredential);
-    expect(result).toEqual(updatedCredential);
+    expect(credentialRepositoryMock.findByIdAndUpdate).toHaveBeenCalledWith(id, mockedCredential);
+    expect(result).toEqual(mockedCredential);
   });
 
   it('should throw NotFoundError when credential not found', async () => {
@@ -56,17 +56,8 @@ describe('update-credential.usecase', () => {
   });
 
   it('should throw BadRequestError when missing fields in request', async () => {
-    const id = 'mockedCredentialId';
-    const invalidCredential: ICredentialDTO = {
-      service: '',
-      username: 'Updated Username',
-      password: 'Updated Password'
-    };
-
-    credentialRepositoryMock.findById.mockResolvedValueOnce({} as ICredentialDTO);
-
     try {
-      await updateCredentialUseCase.execute(id, invalidCredential);
+      await updateCredentialUseCase.execute('mockedCredentialId', {} as ICredentialDTO);
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError);
     }

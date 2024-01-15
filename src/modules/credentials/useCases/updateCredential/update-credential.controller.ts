@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { UnauthorizedError } from '../../../../shared/errors/Error';
+import { BadRequestError, UnauthorizedError } from '../../../../shared/errors/Error';
 import { encrypt } from '../../../../utils/encryption';
 import { UpdateCredentialUseCase } from './update-credential.usecase';
 
@@ -13,9 +13,11 @@ class UpdateCredentialController {
     let { password } = req.body;
     const user = req.user;
     if (!user) throw new UnauthorizedError('Unauthorized');
-    password = encrypt(password, user.secret);
+    if (!service && !username && !password)
+      throw new BadRequestError('At least one of the fields (service, username, password) is required for updating.');
+    password = password ? encrypt(password, user.secret) : undefined;
     const updatedCredential = await updateCredentialUseCase.execute(id, { service, username, password });
-    return res.status(200).json({ message: 'Credential Updated', credential: updatedCredential });
+    return res.status(200).json({ credential: updatedCredential });
   }
 }
 

@@ -36,11 +36,8 @@ describe('update-vault.usecase', () => {
   });
 
   it('should throw BadRequestError when missing fields in request', async () => {
-    const invalidVaultId = '';
-    const updatedVaultName = 'Updated Vault Name';
-
     try {
-      await updateVaultUseCase.execute(invalidVaultId, updatedVaultName);
+      await updateVaultUseCase.execute('', 'Updated Vault Name');
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestError);
     }

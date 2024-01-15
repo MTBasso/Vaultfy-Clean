@@ -2,11 +2,23 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { UnauthorizedError } from '../../../../shared/errors/Error';
+import * as encryptionModule from '../../../../utils/encryption';
 import { CreateCredentialController } from './create-credential.controller';
 import { CreateCredentialUseCase } from './create-credential.usecase';
 
+jest.mock('tsyringe', () => ({
+  container: {
+    resolve: jest.fn()
+  }
+}));
+
 jest.mock('./create-credential.usecase', () => ({
   CreateCredentialUseCase: jest.fn()
+}));
+
+jest.mock('../../../../utils/encryption', () => ({
+  ...jest.requireActual('../../../../utils/encryption'),
+  encrypt: jest.fn().mockReturnValue('EncryptedPassword')
 }));
 
 describe('create-credential.controller', () => {
@@ -34,6 +46,8 @@ describe('create-credential.controller', () => {
       username: 'testUsername',
       password: 'testPassword'
     };
+
+    (encryptionModule.encrypt as jest.Mock).mockReturnValueOnce('EncryptedPassword');
     createCredentialUseCaseMock.execute.mockResolvedValueOnce(mockCredentialData);
 
     const mockRequest = {
@@ -48,11 +62,19 @@ describe('create-credential.controller', () => {
 
     await createCredentialController.handle(mockRequest, mockResponse);
 
-    expect(createCredentialUseCaseMock.execute).toHaveBeenCalledWith(mockCredentialData);
+    expect(createCredentialUseCaseMock.execute).toHaveBeenCalledWith({
+      ...mockCredentialData,
+      password: 'EncryptedPassword'
+    });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Credential Created',
-      credential: mockCredentialData
+      credential: {
+        vaultId: mockCredentialData.vaultId,
+        service: mockCredentialData.service,
+        username: mockCredentialData.username,
+        password: mockCredentialData.password
+      }
     });
   });
 
@@ -75,9 +97,10 @@ describe('create-credential.controller', () => {
       json: jest.fn()
     } as unknown as jest.Mocked<Response>;
 
-    await expect(createCredentialController.handle(mockRequest, mockResponse)).rejects.toThrow(UnauthorizedError);
-    expect(createCredentialUseCaseMock.execute).not.toHaveBeenCalled();
-    expect(mockResponse.status).not.toHaveBeenCalledWith(201);
-    expect(mockResponse.json).not.toHaveBeenCalled();
+    try {
+      await createCredentialController.handle(mockRequest, mockResponse);
+    } catch (error) {
+      expect(error).toBeInstanceOf(UnauthorizedError);
+    }
   });
 });

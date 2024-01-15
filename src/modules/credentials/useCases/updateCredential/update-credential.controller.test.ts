@@ -56,7 +56,7 @@ describe('UpdateCredentialController', () => {
     await updateCredentialController.handle(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Credential Updated', credential: undefined });
+    expect(mockResponse.json).toHaveBeenCalledWith({ credential: undefined });
   });
 
   it('should handle unauthorized error and throw UnauthorizedError', async () => {

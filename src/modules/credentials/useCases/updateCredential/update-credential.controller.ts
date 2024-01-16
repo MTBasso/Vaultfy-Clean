@@ -15,8 +15,12 @@ class UpdateCredentialController {
     if (!user) throw new UnauthorizedError('Unauthorized');
     if (!service && !username && !password)
       throw new BadRequestError('At least one of the fields (service, username, password) is required for updating.');
-    password = password ? encrypt(password, user.secret) : undefined;
-    const updatedCredential = await updateCredentialUseCase.execute(id, { service, username, password });
+    password = password !== undefined && password !== '' ? encrypt(password, user.secret) : undefined;
+    const updatedCredential = await updateCredentialUseCase.execute(id, {
+      service: service !== undefined && service !== '' ? service : undefined,
+      username: username !== undefined && username !== '' ? username : undefined,
+      password
+    });
     return res.status(200).json({ credential: updatedCredential });
   }
 }

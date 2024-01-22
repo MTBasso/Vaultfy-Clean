@@ -52,7 +52,12 @@ describe('create-vault.controller', () => {
 
     await createVaultController.handle(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Vault Created' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      vault: {
+        name: mockVaultData.name,
+        userId: mockVaultData.userId
+      }
+    });
   });
 
   it('should handle vault creation error and throw InternalServerError', async () => {

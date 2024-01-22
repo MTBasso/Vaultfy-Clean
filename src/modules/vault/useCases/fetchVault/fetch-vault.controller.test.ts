@@ -56,7 +56,7 @@ describe('fetch-vault.controller', () => {
     await fetchVaultController.handle(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Vault Fetched Succesfully', vault: mockVault });
+    expect(mockResponse.json).toHaveBeenCalledWith({ vault: mockVault });
   });
 
   it('should throw InternalServerError', async () => {

@@ -51,7 +51,6 @@ describe('register-user.controller', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     // Ensure that the response JSON method is called with the correct data
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: 'User Registered Successfully!',
       user: mockUserData
     });
   });

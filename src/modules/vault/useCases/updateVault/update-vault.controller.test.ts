@@ -34,12 +34,11 @@ describe('update-vault.controller', () => {
   });
 
   it('should handle vault update successfully and return JSON response', async () => {
-    const existingVaultId = 'existingVaultId';
-    const updatedVaultName = 'Updated Vault Name';
+    const updatedVault = { id: 'existingVaultId', name: 'Updated Vault Name' };
 
     const mockRequest = {
-      params: { id: existingVaultId },
-      body: { name: updatedVaultName }
+      params: { id: updatedVault.id },
+      body: { name: updatedVault.name }
     } as unknown as Request;
 
     const mockResponse = {
@@ -49,9 +48,9 @@ describe('update-vault.controller', () => {
 
     await updateVaultController.handle(mockRequest, mockResponse);
 
-    expect(updateVaultUseCaseMock.execute).toHaveBeenCalledWith(existingVaultId, updatedVaultName);
+    expect(updateVaultUseCaseMock.execute).toHaveBeenCalledWith(updatedVault.id, updatedVault.name);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Vault Updated' });
+    expect(mockResponse.json).toHaveBeenCalledWith({ updatedVault: undefined });
   });
 
   it('should handle vault update error and throw InternalServerError', async () => {

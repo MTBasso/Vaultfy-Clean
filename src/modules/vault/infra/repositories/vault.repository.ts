@@ -18,6 +18,7 @@ class VaultRepository implements IVaultRepository {
   async register({ userId, name }: IVaultDTO): Promise<IVaultDTO> {
     try {
       const fetchedVault = await prisma.vault.findFirst({ where: { name: name } });
+      console.log('register fetchedVault: ', fetchedVault);
       if (fetchedVault || fetchedVault !== null) throw new ConflictError('Vault with this name already exists');
       if (!userId || !name) throw new BadRequestError('Missing fields in request');
       const createdVault = await prisma.vault.create({
@@ -29,7 +30,7 @@ class VaultRepository implements IVaultRepository {
       if (!createdVault) throw new InternalServerError('Error while creating vault');
       return createdVault;
     } catch (error) {
-      if (error instanceof BadRequestError) {
+      if (error instanceof BadRequestError || error instanceof ConflictError) {
         throw error;
       }
       throw new InternalServerError('Error while creating vault');

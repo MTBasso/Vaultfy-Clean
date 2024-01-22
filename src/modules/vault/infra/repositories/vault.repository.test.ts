@@ -8,6 +8,7 @@ jest.mock('../../../../shared/infra/prisma/prismaClient', () => ({
       create: jest.fn(),
       findUnique: jest.fn(),
       findMany: jest.fn(),
+      findFirst: jest.fn(),
       update: jest.fn(),
       delete: jest.fn()
     }
@@ -28,9 +29,11 @@ describe('VaultRepository', () => {
         userId: 'mockedUserId',
         name: 'Mocked Vault'
       };
+      (prismaModule.prisma.vault.findFirst as jest.Mock).mockResolvedValueOnce(null);
       (prismaModule.prisma.vault.create as jest.Mock).mockResolvedValueOnce(mockCreatedVault);
       const mockVaultData = { userId: 'mockedUserId', name: 'Mocked Vault' };
       const result = await vaultRepository.register(mockVaultData);
+      console.log(result);
 
       expect(prismaModule.prisma.vault.create).toHaveBeenCalledWith({ data: mockVaultData });
       expect(result).toEqual({
@@ -41,6 +44,7 @@ describe('VaultRepository', () => {
     });
 
     it('should throw InternalServerError when Prisma create fails', async () => {
+      (prismaModule.prisma.vault.findFirst as jest.Mock).mockResolvedValueOnce(null);
       (prismaModule.prisma.vault.create as jest.Mock).mockRejectedValueOnce(new Error('Unexpected Prisma error'));
 
       const mockVaultDTO = { userId: 'mockedUserId', name: 'Mocked Vault' };

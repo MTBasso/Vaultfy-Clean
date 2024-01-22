@@ -68,7 +68,6 @@ describe('create-credential.controller', () => {
     });
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: 'Credential Created',
       credential: {
         vaultId: mockCredentialData.vaultId,
         service: mockCredentialData.service,

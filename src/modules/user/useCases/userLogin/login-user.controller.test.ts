@@ -53,7 +53,6 @@ describe('UserLoginController', () => {
     expect(mockResponse.cookie).toHaveBeenCalledWith('token', 'mockedToken');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: 'Logged In',
       token: 'mockedToken'
     });
   });

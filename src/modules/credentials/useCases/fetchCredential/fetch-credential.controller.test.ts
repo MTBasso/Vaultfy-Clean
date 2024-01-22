@@ -65,7 +65,6 @@ describe('fetch-credential.controller', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: 'Credential fetched successfully',
       credential: {
         service: mockCredential.service,
         username: mockCredential.username,

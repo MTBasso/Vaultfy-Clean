@@ -15,7 +15,7 @@ class CreateCredentialController {
     password = encrypt(password, user.secret);
     const createCredentialUseCase = container.resolve(CreateCredentialUseCase);
     const createdCreadential = await createCredentialUseCase.execute({ vaultId, service, username, password });
-    return res.status(201).json({ message: 'Credential Created', credential: createdCreadential });
+    return res.status(201).json({ credential: createdCreadential });
   }
 }
 

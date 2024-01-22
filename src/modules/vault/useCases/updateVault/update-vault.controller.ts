@@ -10,8 +10,8 @@ class UpdateVaultController {
     const id = req.params.id;
     const { name } = req.body;
     if (!id || !name) throw new BadRequestError('Missing fields in request');
-    await updatedVaultUseCase.execute(id, name);
-    return res.status(200).json({ message: 'Vault Updated' });
+    const updatedVault = await updatedVaultUseCase.execute(id, name);
+    return res.status(200).json({ vault: updatedVault });
   }
 }
 

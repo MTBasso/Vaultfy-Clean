@@ -12,8 +12,8 @@ class CreateVaultController {
       const userId = req.user?.id;
       if (!userId) throw new UnauthorizedError('Unauthorized');
       const createVaultUseCase = container.resolve(CreateVaultUseCase);
-      await createVaultUseCase.execute({ userId, name });
-      return res.status(201).json({ message: 'Vault Created' });
+      const createdVault = await createVaultUseCase.execute({ userId, name });
+      return res.status(201).json({ vault: createdVault });
     } catch (error) {
       if (error instanceof (BadRequestError || UnauthorizedError)) {
         throw error;

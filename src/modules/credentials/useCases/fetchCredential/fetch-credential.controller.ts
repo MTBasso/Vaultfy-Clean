@@ -14,7 +14,6 @@ class FetchCredentialController {
     const credential = await fetchCredentialUseCase.execute(id);
     const decryptedPassword = decrypt(credential.password, user.secret);
     return res.status(200).json({
-      message: 'Credential fetched successfully',
       credential: {
         service: credential.service,
         username: credential.username,

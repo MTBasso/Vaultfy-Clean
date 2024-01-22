@@ -12,7 +12,7 @@ class FetchVaultController {
       const fetchVaultUseCase = container.resolve(FetchVaultUseCase);
       const vault = await fetchVaultUseCase.execute(id);
       if (!vault || vault === null) throw new NotFoundError('Vault not found');
-      return res.status(200).json({ message: 'Vault Fetched Succesfully', vault: vault });
+      return res.status(200).json({ vault: vault });
     } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) throw error;
       throw new InternalServerError('Internal Server Error');

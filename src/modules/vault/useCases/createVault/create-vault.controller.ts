@@ -20,7 +20,7 @@ class CreateVaultController {
       const createdVault = await createVaultUseCase.execute({ userId, name });
       return res.status(201).json({ vault: createdVault });
     } catch (error) {
-      if (error instanceof (BadRequestError || UnauthorizedError || ConflictError)) {
+      if (error instanceof BadRequestError || error instanceof UnauthorizedError || error instanceof ConflictError) {
         throw error;
       }
       throw new InternalServerError('Internal Server Error');

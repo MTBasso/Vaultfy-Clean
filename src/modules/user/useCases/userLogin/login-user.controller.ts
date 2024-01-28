@@ -13,7 +13,8 @@ class UserLoginController {
       const token = await loginUseCase.execute({ email, password });
       return res.status(200).json({ token: token });
     } catch (error) {
-      if (error instanceof (BadRequestError || InternalServerError || ConflictError)) throw error;
+      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError)
+        throw error;
       throw new InternalServerError('Unhandled Internal Server Error');
     }
   }

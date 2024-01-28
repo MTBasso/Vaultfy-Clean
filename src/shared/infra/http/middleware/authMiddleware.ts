@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
-import { NotFoundError, UnauthorizedError } from '../../../errors/Error';
+import { InternalServerError, NotFoundError, UnauthorizedError } from '../../../errors/Error';
 import { prisma } from '../../prisma/prismaClient';
 
 export interface DecodedUser {
@@ -12,17 +12,21 @@ export interface DecodedUser {
 }
 
 const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
-  const authToken = req.cookies.token;
-  if (!authToken) {
-    throw new UnauthorizedError('Authorization header missing');
+  try {
+    const authToken = req.headers.authorization;
+    if (!authToken) throw new UnauthorizedError('Authorization header missing');
+    if (authToken.startsWith('Bearer ')) {
+      const token = authToken.split(' ')[1];
+      const decoded = verify(token, process.env.JWT_SECRET as string) as DecodedUser;
+      const user = await prisma.user.findUnique({ where: { email: decoded.email } });
+      if (!user) throw new NotFoundError('User not found');
+      req.user = user;
+      next();
+    }
+  } catch (error) {
+    if (error instanceof NotFoundError || error instanceof UnauthorizedError) throw error;
+    throw new InternalServerError('Unhandled Internal Server Error');
   }
-  const decoded = verify(authToken, process.env.JWT_SECRET as string) as DecodedUser;
-  const user = await prisma.user.findUnique({ where: { email: decoded.email } });
-  if (!user) {
-    throw new NotFoundError('User not found');
-  }
-  req.user = user;
-  next();
 };
 
 export { authenticateToken };

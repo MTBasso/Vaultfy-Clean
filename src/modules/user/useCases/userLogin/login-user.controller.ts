@@ -11,12 +11,9 @@ class UserLoginController {
       const { email, password }: IUserDTO = req.body;
       const loginUseCase = container.resolve(UserLoginUseCase);
       const token = await loginUseCase.execute({ email, password });
-      res.cookie('token', token);
       return res.status(200).json({ token: token });
     } catch (error) {
-      if (error instanceof (BadRequestError || InternalServerError || ConflictError)) {
-        throw error;
-      }
+      if (error instanceof (BadRequestError || InternalServerError || ConflictError)) throw error;
       throw new InternalServerError('Unhandled Internal Server Error');
     }
   }

@@ -7,8 +7,8 @@ import { ListUserVaultsUseCase } from './list-user-vaults.usecase';
 class ListUserVaultsController {
   async handle(req: Request, res: Response): Promise<Response> {
     try {
-      const id: string = req.params.id;
-      if (!id) throw new BadRequestError('Missing Id in request');
+      const id: string | undefined = req.user?.id;
+      if (!id || id === undefined) throw new BadRequestError('Missing Id in request');
       const listUserVaultsUseCase = container.resolve(ListUserVaultsUseCase);
       const userVaults = await listUserVaultsUseCase.execute(id);
       if (!userVaults || userVaults === null) throw new NotFoundError('User not found');

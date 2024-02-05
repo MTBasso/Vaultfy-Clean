@@ -15,6 +15,7 @@ class FetchCredentialController {
     const decryptedPassword = decrypt(credential.password, user.secret);
     return res.status(200).json({
       credential: {
+        vaultId: credential.vaultId,
         service: credential.service,
         username: credential.username,
         password: decryptedPassword

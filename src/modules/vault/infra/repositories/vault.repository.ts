@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
+import { BadRequestError, InternalServerError, NotFoundError } from '../../../../shared/errors/Error';
 import { prisma } from '../../../../shared/infra/prisma/prismaClient';
 import { IVaultDTO } from '../entities/vault.entity';
 import { IVaultRepository } from './vault.repository.interface';
@@ -17,9 +17,6 @@ export interface IVaultAndCredentialsDTO {
 class VaultRepository implements IVaultRepository {
   async register({ userId, name }: IVaultDTO): Promise<IVaultDTO> {
     try {
-      const fetchedVault = await prisma.vault.findFirst({ where: { name: name } });
-      console.log('register fetchedVault: ', fetchedVault);
-      if (fetchedVault || fetchedVault !== null) throw new ConflictError('Vault with this name already exists');
       if (!userId || !name) throw new BadRequestError('Missing fields in request');
       const createdVault = await prisma.vault.create({
         data: {
@@ -30,7 +27,7 @@ class VaultRepository implements IVaultRepository {
       if (!createdVault) throw new InternalServerError('Error while creating vault');
       return createdVault;
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof ConflictError) {
+      if (error instanceof BadRequestError) {
         throw error;
       }
       throw new InternalServerError('Error while creating vault');

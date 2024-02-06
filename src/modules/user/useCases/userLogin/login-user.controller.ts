@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { BadRequestError, ConflictError, InternalServerError } from '../../../../shared/errors/Error';
+import { BadRequestError, InternalServerError } from '../../../../shared/errors/Error';
 import { IUserDTO } from '../../infra/entities/user.entity';
 import { UserLoginUseCase } from './login-user.usecase';
 
@@ -13,8 +13,7 @@ class UserLoginController {
       const token = await loginUseCase.execute({ email, password });
       return res.status(200).json({ token: token });
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof InternalServerError || error instanceof ConflictError)
-        throw error;
+      if (error instanceof BadRequestError || error instanceof InternalServerError) throw error;
       throw new InternalServerError('Unhandled Internal Server Error');
     }
   }

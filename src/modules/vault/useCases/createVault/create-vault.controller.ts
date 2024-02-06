@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import {
-  BadRequestError,
-  ConflictError,
-  InternalServerError,
-  UnauthorizedError
-} from '../../../../shared/errors/Error';
+import { BadRequestError, InternalServerError, UnauthorizedError } from '../../../../shared/errors/Error';
 import { CreateVaultUseCase } from './create-vault.usecase';
 
 class CreateVaultController {
@@ -20,7 +15,7 @@ class CreateVaultController {
       const createdVault = await createVaultUseCase.execute({ userId, name });
       return res.status(201).json({ vault: createdVault });
     } catch (error) {
-      if (error instanceof BadRequestError || error instanceof UnauthorizedError || error instanceof ConflictError) {
+      if (error instanceof BadRequestError || error instanceof UnauthorizedError) {
         throw error;
       }
       throw new InternalServerError('Internal Server Error');

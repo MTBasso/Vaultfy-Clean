@@ -21,11 +21,11 @@ model User {
 
 model Vault {
   id         String       @id @default(cuid())
-  name       String       
+  name       String
   credential Credential[]
   User       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  
+
   @@unique([name, userId])
 }
 
